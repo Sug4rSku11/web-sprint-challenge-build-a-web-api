@@ -8,11 +8,11 @@ const { validateActionId,
 
 //GET /api/actions
 router.get('/', (req, res, next) => {
-Action.get()
-.then(actions => {
-    res.status(200).json(actions)
-})
-.catch(next)
+    Action.get()
+    .then(actions => {
+        res.status(200).json(actions)
+    })
+    .catch(next)
 })
 
 //GET /api/actions/:id
@@ -43,7 +43,7 @@ router.delete('/:id', validateActionId, async (req, res, next) => {
     try {
         await Action.remove(req.params.id)
         res.json(req.action)
-    }catch(err){
+    } catch(err){
         next(err)
     }
 })

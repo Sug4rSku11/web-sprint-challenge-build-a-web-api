@@ -2,7 +2,6 @@
 const Project = require('./projects-model')
 
 function logger(req, res, next) {
-    // DO YOUR MAGIC
     const timestamp = new Date().toLocaleString()
     const method = req.method
     const url = req.originalUrl
@@ -11,15 +10,15 @@ function logger(req, res, next) {
   }
 
 async function validateProjectId(req, res, next){
-    try{
+    try {
         const project = await Project.get(req.params.id)
         if(!project){
         res.status(404).json({ message: "project not found"})
-        }else{
+        } else {
             req.project = project
             next()
         }
-    }catch (err){
+    } catch (err){
         res.status(500).json({
             message: "problem finding project"
         })
@@ -27,24 +26,23 @@ async function validateProjectId(req, res, next){
 }
 function validateProject(req, res, next) {
     const { description, name } = req.body
-    if(!name || !description){
+    if (!name || !description){
         res.status(400).json({
             message: "missing required description and/or name"
         })
-    }else {
+    } else {
         next()
     }
 }
-function validateUpdatedProject (req, res, next){ //come back to this
-    const {description, name } = req.body
-    if(!description || !name){
-        res.status(404).json({
-            message: "missing required description and/or name"
-        })
-    }else{
-        next()
-    }
+function validateUpdatedProject(req, res, next) {
+	const { name, description, completed } = req.body;
+	if (name && description && typeof completed === 'boolean' ) {
+		next()
+	} else {
+		res.status(400).json({message: "description, name and/or completed required"})
+	}
 }
+
   module.exports = {
       logger,
       validateProjectId,
