@@ -39,7 +39,7 @@ function validateUpdatedProject(req, res, next) {
 	if (name && description && typeof completed === 'boolean' ) {
 		next()
 	} else {
-		res.status(400).json({message: "description, name and/or completed required"})
+		res.status(400).json({message: "description, name or completed required"})
 	}
 }
 
