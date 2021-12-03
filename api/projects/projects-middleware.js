@@ -9,6 +9,7 @@ function logger(req, res, next) {
     console.log(`[${timestamp}] ${method} to ${url}`)
     next()
   }
+
 async function validateProjectId(req, res, next){
     try{
         const project = await Project.get(req.params.id)
@@ -25,18 +26,28 @@ async function validateProjectId(req, res, next){
     }
 }
 function validateProject(req, res, next) {
-    const { name, description } = req.body
+    const { description, name } = req.body
     if(!name || !description){
         res.status(400).json({
-            message: "missing required name and/or description"
+            message: "missing required description and/or name"
         })
     }else {
         next()
     }
 }
-
+function validateUpdatedProject (req, res, next){ //come back to this
+    const {description, name } = req.body
+    if(!description || !name){
+        res.status(404).json({
+            message: "missing required description and/or name"
+        })
+    }else{
+        next()
+    }
+}
   module.exports = {
       logger,
       validateProjectId,
       validateProject,
+      validateUpdatedProject,
   }

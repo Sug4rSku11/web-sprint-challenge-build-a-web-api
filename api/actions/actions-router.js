@@ -26,12 +26,21 @@ router.post('/', validateAction, (req, res, next) => {
     .catch(next)
 })
 //PUT /api/actions/:id
-router.put('/:id', (req, res, next) => {
-
+router.put('/:id', validateAction, validateActionId, async (req, res) => {
+    const { id } = req.params
+    await Action.update(id, req.body)
+    .then(action => {
+        res.json(action)
+    })
 })
 //DELETE /api/actions/:id
-router.delete('/:id', (req, res, next) => {
-
+router.delete('/:id', validateActionId, async (req, res, next) => {
+    try {
+        await Action.remove(req.params.id)
+        res.json(req.action)
+    }catch(err){
+        next(err)
+    }
 })
 
 

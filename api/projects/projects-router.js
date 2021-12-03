@@ -4,7 +4,8 @@ const router = express.Router()
 const Project = require('./projects-model')
 const { validateProjectId,
         validateProject,
-} = require('../projects/projects-middleware')
+        validateUpdatedProject,
+      } = require('../projects/projects-middleware')
 
 //GET /api/projects
 router.get('/', (req, res, next) => {
@@ -27,17 +28,27 @@ router.post('/', validateProject, (req, res, next) => {
     .catch(next)
 })
 //PUT /api/projects/:id
-router.put('/:id', (req, res, next) => {
-
+router.put('/:id', validateProject, validateProjectId, validateUpdatedProject, async (req, res) => {
+    const { id } = req.params
+    await Project.update(id, req.body)
+    .then(project => {
+        res.json(project)
+    })
 })
 //DELETE /api/projects/:id
-router.delete('/:id', (req, res, next) => {
-
+router.delete('/:id', validateProjectId, async (req, res, next) => {
+    try {
+        await Project.remove(req.params.id)
+        res.json(req.project)
+    }catch (err){
+        next(err)
+    }
 })
 //GET /api/projects/:id/actions
 router.get('/:id/actions', (req, res, next) => {
 
 })
+
 
 
 module.exports = router
