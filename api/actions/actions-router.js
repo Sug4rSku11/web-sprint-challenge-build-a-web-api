@@ -2,7 +2,9 @@
 const express = require('express')
 const Action = require('./actions-model')
 const router = express.Router()
-
+const { validateActionId,
+    validateAction
+} = require('../actions/actions-middlware')
 //GET /api/actions
 router.get('/', (req, res, next) => {
 Action.get()
@@ -12,12 +14,16 @@ Action.get()
 .catch(next)
 })
 //GET /api/actions/:id
-router.get('/:id', (req, res, next) => {
-
+router.get('/:id', validateActionId, (req, res) => {
+    res.json(req.action)
 })
 //POST /api/actions
-router.post('/', (req, res, next) => {
-
+router.post('/', validateAction, (req, res, next) => {
+    Action.insert(req.body)
+    .then(newAction => {
+        res.json(newAction)
+    })
+    .catch(next)
 })
 //PUT /api/actions/:id
 router.put('/:id', (req, res, next) => {
