@@ -5,7 +5,11 @@ const router = express.Router()
 
 //GET /api/actions
 router.get('/', (req, res, next) => {
-
+Action.get()
+.then(actions => {
+    res.status(200).json(actions)
+})
+.catch(next)
 })
 //GET /api/actions/:id
 router.get('/:id', (req, res, next) => {
