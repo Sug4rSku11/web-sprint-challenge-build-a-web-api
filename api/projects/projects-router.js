@@ -15,10 +15,12 @@ router.get('/', (req, res, next) => {
     })
     .catch(next)
 })
+
 //GET /api/projets/:id
 router.get('/:id', validateProjectId, (req, res) => {
     res.json(req.project)
 })
+
 //POST /api/projects
 router.post('/', validateProject, (req, res, next) => {
     Project.insert(req.body)
@@ -27,6 +29,7 @@ router.post('/', validateProject, (req, res, next) => {
     })
     .catch(next)
 })
+
 //PUT /api/projects/:id
 router.put('/:id', validateProject, validateProjectId, validateUpdatedProject, async (req, res) => {
     const { id } = req.params
@@ -35,6 +38,7 @@ router.put('/:id', validateProject, validateProjectId, validateUpdatedProject, a
         res.json(project)
     })
 })
+
 //DELETE /api/projects/:id
 router.delete('/:id', validateProjectId, async (req, res, next) => {
     try {
@@ -44,9 +48,15 @@ router.delete('/:id', validateProjectId, async (req, res, next) => {
         next(err)
     }
 })
-//GET /api/projects/:id/actions
-router.get('/:id/actions', (req, res, next) => {
 
+//GET /api/projects/:id/actions
+router.get('/:id/actions', async (req, res, next) => {
+    try{
+        const result = await Project.getProjectActions(req.params.id)
+        res.json(result)
+    }catch(err){
+        next(err)
+    }
 })
 
 

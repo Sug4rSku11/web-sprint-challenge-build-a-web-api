@@ -3,8 +3,9 @@ const express = require('express')
 const Action = require('./actions-model')
 const router = express.Router()
 const { validateActionId,
-    validateAction
-} = require('../actions/actions-middlware')
+        validateAction
+        } = require('../actions/actions-middlware')
+
 //GET /api/actions
 router.get('/', (req, res, next) => {
 Action.get()
@@ -13,10 +14,12 @@ Action.get()
 })
 .catch(next)
 })
+
 //GET /api/actions/:id
 router.get('/:id', validateActionId, (req, res) => {
     res.json(req.action)
 })
+
 //POST /api/actions
 router.post('/', validateAction, (req, res, next) => {
     Action.insert(req.body)
@@ -25,6 +28,7 @@ router.post('/', validateAction, (req, res, next) => {
     })
     .catch(next)
 })
+
 //PUT /api/actions/:id
 router.put('/:id', validateAction, validateActionId, async (req, res) => {
     const { id } = req.params
@@ -33,6 +37,7 @@ router.put('/:id', validateAction, validateActionId, async (req, res) => {
         res.json(action)
     })
 })
+
 //DELETE /api/actions/:id
 router.delete('/:id', validateActionId, async (req, res, next) => {
     try {
